@@ -1,0 +1,17 @@
+
+
+### create new Pin:
+POST http://localhost:5000/api/pins
+Content-Type: application/json
+
+{
+    "username":"nadien",
+    "title":"test2",
+    "description":"bla bla canada",
+    "rating":3,
+    "lat": 51.340199,
+    "lon":12.360103
+}
+
+### get all Pins:
+GET http://localhost:5000/api/pins

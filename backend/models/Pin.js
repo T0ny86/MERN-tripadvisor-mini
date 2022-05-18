@@ -3,31 +3,31 @@ import mongoose from "mongoose"
 const PinSchema = new mongoose.Schema({
     username: {
         type: String,
-        required,
+        required: true
     },
     title: {
         type: String,
-        required,
+        required: true,
         unique: true,
         min: 3
     },
     description: {
         type: String,
-        required,
+        required: true,
     },
     rating: {
         type: Number,
-        required,
+        required: true,
         min: 0,
         max: 5
     },
     lat: {
         type: Number,
-        required
+        required: true
     },
     lon: {
         type: Number,
-        required
+        required: true,
     }
     // timestamps: true => create automatically 'createdAt' , 'updatedAt'
 }, { timestamps: true });

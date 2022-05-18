@@ -2,11 +2,15 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
 dotenv.config();
+import pinRoute from "./routers/pins.js"
 
 const app = express();
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
+
+app.use("/api/pins", pinRoute)
 
 const PORT = process.env.PORT || 5000;
 mongoose.connect(process.env.CONNECTION_URL)
