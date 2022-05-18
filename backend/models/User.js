@@ -3,19 +3,19 @@ import mongoose from "mongoose"
 const UserSchema = new mongoose.Schema({
     username: {
         type: String,
-        required,
+        required: true,
         min: 3,
         max: 20,
         unique: true
     },
     email: {
         type: String,
-        required,
+        required: true,
         unique: true
     },
     password: {
         type: String,
-        required,
+        required: true,
         min: 6
     }
     // timestamps: true => create automatically 'createdAt' , 'updatedAt'
