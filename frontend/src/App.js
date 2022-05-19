@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Map, { Marker, Popup } from 'react-map-gl';
+import axios from "axios"
 import locationIcon from "./assets/location.svg"
 // import * as turf from "@turf/turf"
 import "mapbox-gl/dist/mapbox-gl.css";
@@ -14,6 +15,7 @@ const coordinates = {
 }
 
 function App() {
+  const [pins, setPins] = useState([]);
   const [showPopup, setShowPopup] = useState(true);
   const [viewSate, setViewSate] = useState({
     width: "100vw",
@@ -22,6 +24,19 @@ function App() {
     latitude: coordinates.latitude,
     zoom: 8
   })
+
+  useEffect(() => {
+    const getPins = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/pins")
+        console.log('res::',response)
+        setPins(response.data)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getPins()
+  }, []);
 
   return (
     <Map
@@ -32,28 +47,33 @@ function App() {
       style={{ width: "100vw", height: "100vh" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
     >
-
-      <Marker longitude={coordinates.longitude} latitude={coordinates.latitude} color="red" anchor='center'>
-        {/* <LocationOnIcon style={{fontSize:viewSate.zoom * 7}} /> */}
-      </Marker>
-      {showPopup && (
-        <Popup longitude={coordinates.longitude} latitude={coordinates.latitude}
-          anchor="top"
-          onClose={() => setShowPopup(false)}>
-          <div className={styles.card}>
-            <label>Place</label>
-            <h4 className={styles.place}> place name </h4>
-            <label>Review</label>
-            <p className={styles.description} > bla bla bla</p>
-            <label>Rating</label>
-            <div className={styles.stars} >
-              <Star className={styles.star}/>
-            </div>
-            <label>Information</label>
-            <span className={styles.username}>creadted by <b>tony</b></span>
-            <span className={styles.date} >1 hour ago</span>
-          </div>
-        </Popup>)}
+      {pins.map(p => {
+        return (
+          <>
+            <Marker longitude={p.lon} latitude={p.lat} color="red" anchor='center'>
+              {/* <LocationOnIcon style={{fontSize:viewSate.zoom * 7}} /> */}
+            </Marker>
+            {showPopup && (
+              <Popup longitude={p.lon} latitude={p.lat}
+                anchor="top"
+                onClose={() => setShowPopup(false)}>
+                <div className={styles.card}>
+                  <label>Place</label>
+                  <h4 className={styles.place}> place name </h4>
+                  <label>Review</label>
+                  <p className={styles.description} > bla bla bla</p>
+                  <label>Rating</label>
+                  <div className={styles.stars} >
+                    <Star className={styles.star} />
+                  </div>
+                  <label>Information</label>
+                  <span className={styles.username}>creadted by <b>tony</b></span>
+                  <span className={styles.date} >1 hour ago</span>
+                </div>
+              </Popup>)}
+          </>
+        )
+      })}
     </Map>
   );
 }
