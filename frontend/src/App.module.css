@@ -4,6 +4,8 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    cursor: pointer;
+
 }
 
 label {
@@ -32,4 +34,12 @@ label {
 
 .date {
     font-size: 12px;
+}
+
+.toFront{
+    z-index: 100;
+}
+
+.marker{
+    cursor: pointer;
 }
