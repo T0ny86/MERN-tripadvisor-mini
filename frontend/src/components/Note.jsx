@@ -11,7 +11,7 @@ const Note = ({ lon, lat, title, description, username, createdAt, setCurrId }) 
             closeButton={true}
             closeOnClick={false}
             onClose={() => { setCurrId(null) }}
-
+            offset={[4, 1]}
             anchor="left"
         >
             <div className={styles.card}>

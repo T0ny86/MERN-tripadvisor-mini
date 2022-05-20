@@ -36,10 +36,37 @@ label {
     font-size: 12px;
 }
 
-.toFront{
+.toFront {
     z-index: 100;
 }
 
-.marker{
+.marker {
     cursor: pointer;
+}
+
+form {
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+input {
+    border: none;
+    border-bottom: 1px solid gray;
+}
+
+input::placeholder,
+textarea::placeholder {
+    font-size: 12px;
+    color: lightgrey;
+}
+
+.submitButton {
+    border: none;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    background-color: tomato;
 }

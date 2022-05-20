@@ -6,7 +6,7 @@ import locationIcon from "./assets/location.svg"
 import "mapbox-gl/dist/mapbox-gl.css";
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 
-import styles from "./App.module.css"
+import "./App.module.css"
 import Note from './components/Note';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -25,14 +25,14 @@ function App() {
     height: "100vh",
     longitude: coordinates.longitude,
     latitude: coordinates.latitude,
-    zoom: 8
+    zoom: 10
   })
 
   useEffect(() => {
     const getPins = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/pins")
-        console.log('res::', response)
+        // console.log('res::', response)
         setPins(response.data)
       } catch (error) {
         console.log(error)
@@ -41,40 +41,45 @@ function App() {
     getPins()
   }, []);
 
-  const handleMarkerClick = (id) => {
-
+  const handleMarkerClick = (id, lat, lon) => {
+    setViewSate({
+      ...viewSate,
+      longitude: lon,
+      latitude: lat
+    })
     setCurrentPlaceId(id)
   }
 
   const handleAddClick = (e) => {
     e.preventDefault()
-    // console.log(e.lngLat)
+    // console.log(e) 
     const { lat, lng } = e.lngLat
     setNewPlace({
       lat: lat,
       lon: lng
     })
   }
+
   return (
     <Map
       {...viewSate}
       onMove={nextView => setViewSate(nextView.viewState)}
-
       mapboxAccessToken={MAPBOX_TOKEN}
-      style={{ width: "100vw", height: "100vh" }}
+      style={{ width: "100vw", height: "100vh", transitionDuration: "all 200ms" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
       onDblClick={handleAddClick}
     >
       {pins.map((p, index) => {
         return (
           <div key={index}>
-            <Marker className={styles.marker} longitude={p.lon} latitude={p.lat}
-              color="red" anchor='center'
+            <Marker className={'marker'} longitude={p.lon} latitude={p.lat} offset={[-2, -15]}
+              color={currentUser === p.username ? "tomato" : "slateblue"} anchor='center' style={{ cursor: 'pointer' }}
               onClick={(e) => {
-                setCurrentPlaceId(p._id)
+                handleMarkerClick(p._id, p.lat, p.lon)
                 // console.log("clickedOpen:", p._id)
                 // console.log("clickedCurrID:", currentPlaceId)
               }}
+
             >
 
             </Marker>
@@ -98,7 +103,25 @@ function App() {
         closeOnClick={false}
         onClose={() => setNewPlace(null)}
         anchor="left"
-      />}
+      >
+        <div>
+          <form>
+            <label>Tiele</label>
+            <input placeholder='Enter a title'></input>
+            <label>Review</label>
+            <textarea placeholder='write your opinion about this place'></textarea>
+            <label>Rating</label>
+            <select>
+              <option value={"1"} > 1 </option>
+              <option value={"2"} > 2 </option>
+              <option value={"3"} > 3 </option>
+              <option value={"4"} > 4 </option>
+              <option value={"5"} > 5 </option>
+            </select>
+            <button type='submit' className='submitButton' >Add Pin</button>
+          </form>
+        </div>
+      </Popup>}
     </Map>
   );
 }
