@@ -3,14 +3,17 @@ import Star from "@material-ui/icons/Star"
 import { Popup } from "react-map-gl";
 import styles from "../App.module.css"
 
-const Note = ({lon, lat, title, description, username, createdAt}) => {
+const Note = ({ lon, lat, title, description, username, createdAt, setCurrId }) => {
     return (
         <Popup longitude={lon} latitude={lat} className={styles.toFront}
-        onOpen={()=> console.log("opened")}
-        onClose={()=> console.log("closed")}
-        
-            anchor="top"
-            >
+            // onOpen={()=> console.log("opened")}
+            // onCloe={()=> console.log("closed")}
+            closeButton={true}
+            closeOnClick={false}
+            onClose={() => { setCurrId(null) }}
+
+            anchor="left"
+        >
             <div className={styles.card}>
                 <label>Place</label>
                 <h4 className={styles.place}> {title} </h4>

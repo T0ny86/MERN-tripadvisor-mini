@@ -16,8 +16,10 @@ const coordinates = {
 }
 
 function App() {
+  const currentUser = "tony";
   const [pins, setPins] = useState([]);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
+  const [newPlace, setNewPlace] = useState(null);
   const [viewSate, setViewSate] = useState({
     width: "100vw",
     height: "100vh",
@@ -44,6 +46,15 @@ function App() {
     setCurrentPlaceId(id)
   }
 
+  const handleAddClick = (e) => {
+    e.preventDefault()
+    // console.log(e.lngLat)
+    const { lat, lng } = e.lngLat
+    setNewPlace({
+      lat: lat,
+      lon: lng
+    })
+  }
   return (
     <Map
       {...viewSate}
@@ -52,23 +63,20 @@ function App() {
       mapboxAccessToken={MAPBOX_TOKEN}
       style={{ width: "100vw", height: "100vh" }}
       mapStyle="mapbox://styles/mapbox/streets-v9"
+      onDblClick={handleAddClick}
     >
       {pins.map((p, index) => {
         return (
           <div key={index}>
             <Marker className={styles.marker} longitude={p.lon} latitude={p.lat}
               color="red" anchor='center'
-
+              onClick={(e) => {
+                setCurrentPlaceId(p._id)
+                // console.log("clickedOpen:", p._id)
+                // console.log("clickedCurrID:", currentPlaceId)
+              }}
             >
-              <img src={locationIcon} width="80px"
-              className={styles.marker}
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setCurrentPlaceId(p._id)
-                  console.log("clickedOpen:", p._id)
-                  console.log("clickedCurrID:", currentPlaceId)
-                }}
-              />
+
             </Marker>
             {currentPlaceId === p._id && <Note
               lat={p.lat}
@@ -77,19 +85,22 @@ function App() {
               description={p.description}
               username={p.username}
               createdAt={p.createdAt}
+              setCurrId={setCurrentPlaceId}
             />}
           </div>
         )
       })}
+
+      {newPlace && <Popup
+        latitude={newPlace.lat}
+        longitude={newPlace.lon}
+        closeButton={true}
+        closeOnClick={false}
+        onClose={() => setNewPlace(null)}
+        anchor="left"
+      />}
     </Map>
   );
 }
 
 export default App;
-/*
-
-      <FullscreenControl style={{ width: 'viewport', height: 'viewport' }} />
-      <Marker longitude={12.36} latitude={51.34} anchor='center'>
-        <img src={locationIcon} width="20px" />
-      </Marker>
-*/
