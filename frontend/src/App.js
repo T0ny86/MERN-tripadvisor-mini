@@ -7,6 +7,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import LocationOnIcon from "@material-ui/icons/LocationOn"
 
 import "./App.module.css"
+import styles from "./App.module.css"
 import Note from './components/Note';
 
 const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_TOKEN;
@@ -25,7 +26,7 @@ function App() {
     height: "100vh",
     longitude: coordinates.longitude,
     latitude: coordinates.latitude,
-    zoom: 10
+    zoom: 8
   })
 
   useEffect(() => {
@@ -72,7 +73,7 @@ function App() {
       {pins.map((p, index) => {
         return (
           <div key={index}>
-            <Marker className={'marker'} longitude={p.lon} latitude={p.lat} offset={[-2, -15]}
+            <Marker className={styles.marker} longitude={p.lon} latitude={p.lat} offset={[-2, -15]}
               color={currentUser === p.username ? "tomato" : "slateblue"} anchor='center' style={{ cursor: 'pointer' }}
               onClick={(e) => {
                 handleMarkerClick(p._id, p.lat, p.lon)
@@ -118,7 +119,7 @@ function App() {
               <option value={"4"} > 4 </option>
               <option value={"5"} > 5 </option>
             </select>
-            <button type='submit' className='submitButton' >Add Pin</button>
+            <button type='submit' className={styles.submitButton} >Add Pin</button>
           </form>
         </div>
       </Popup>}
